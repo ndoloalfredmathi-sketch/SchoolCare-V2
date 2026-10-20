@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model SchoolYear {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  startDate DateTime
+  endDate   DateTime
+  isCurrent Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  classes     Class[]
+  enrollments Enrollment[]
+}
+
+model Class {
+  id           Int      @id @default(autoincrement())
+  name         String
+  level        String
+  capacity     Int?
+  schoolYearId Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  schoolYear  SchoolYear   @relation(fields: [schoolYearId], references: [id], onDelete: Restrict)
+  enrollments Enrollment[]
+
+  @@unique([name, schoolYearId])
+  @@index([schoolYearId])
+}
+
+model Student {
+  id          Int          @id @default(autoincrement())
+  matricule   String       @unique
+  firstName   String
+  lastName    String
+  gender      String?
+  birthDate   DateTime?
+  birthPlace  String?
+  address     String?
+  phone       String?
+  email       String?
+  photoUrl    String?
+  status      String       @default("ACTIVE")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  enrollments Enrollment[]
+}
+
+model Enrollment {
+  id           Int      @id @default(autoincrement())
+  studentId    Int
+  classId      Int
+  schoolYearId Int
+  enrolledAt   DateTime @default(now())
+  status       String   @default("ENROLLED")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  student    Student    @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  class      Class      @relation(fields: [classId], references: [id], onDelete: Restrict)
+  schoolYear SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Restrict)
+
+  @@unique([studentId, schoolYearId])
+  @@index([classId])
+  @@index([schoolYearId])
+}

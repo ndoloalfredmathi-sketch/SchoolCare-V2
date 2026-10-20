@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function Dashboard() {
+export default function DashboardPage() {
   return (
     <div className="grid grid-rows-3 grid-cols-1 gap-2 h-full w-full">
       <div className="flex justify-around space-x-2">

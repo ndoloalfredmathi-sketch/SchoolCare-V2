@@ -1,16 +1,19 @@
+export type StudentStatus = "ACTIVE" | "INACTIVE" | "BLOQUE";
+export type StudentGender = "M" | "F";
+
 export interface Student {
   id: string;
   matricule: string;
   firstName: string;
   lastName: string;
-  gender?: string | null;
+  gender?: StudentGender | null;
   birthDate?: string | null;
   birthPlace?: string | null;
   address?: string | null;
   phone?: string | null;
   email?: string | null;
   photoUrl?: string | null;
-  status: string;
+  status: StudentStatus;
   createdAt: string;
   updatedAt: string;
 }
@@ -31,7 +34,7 @@ export interface CreateStudentInput {
   matricule: string;
   firstName: string;
   lastName: string;
-  gender?: string;
+  gender?: StudentGender;
   birthDate?: string;
   birthPlace?: string;
   address?: string;

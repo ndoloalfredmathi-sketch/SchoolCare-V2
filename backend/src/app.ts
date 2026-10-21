@@ -4,10 +4,11 @@ import ClassesRouter from "./routes/classes.js";
 import StudentsRouter from "./routes/students.js";
 import EnrollmentsRouter from "./routes/enrollments.js";
 import { prisma } from "./lib/prisma.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: "100kb" }));
 app.use("/api/school-years", SchoolYearRouter);
 app.use("/api/classes", ClassesRouter);
 app.use("/api/students", StudentsRouter);
@@ -38,5 +39,12 @@ app.get("/api/health", async (_req, res) => {
   }
 });
 
+app.use((_req, res) => {
+  res.status(404).json({
+    message: "Route introuvable.",
+  });
+});
+
+app.use(errorHandler);
 
 export default app;
